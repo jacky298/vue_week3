@@ -20,16 +20,16 @@
           <div class="col-8">
             <form id="form" class="form-signin">
               <div class="form-floating mb-3">
-                <input type="email" class="form-control" id="username"
+                <input type="email" class="form-control" v-model="user.userName" id="username"
                   placeholder="name@example.com" required autofocus>
                 <label for="username">Email address</label>
               </div>
               <div class="form-floating">
-                <input type="password" class="form-control" id="password"
+                <input type="password" class="form-control" v-model="user.password" id="password"
                   placeholder="Password" required>
                 <label for="password">Password</label>
               </div>
-              <button class="btn btn-lg btn-primary w-100 mt-3" type="submit">
+              <button class="btn btn-lg btn-primary w-100 mt-3" type="button" @click="login()">
                 登入
               </button>
             </form>
@@ -50,7 +50,44 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js"
       integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc"
       crossorigin="anonymous"></script>
-    <script src="login.js"></script>  
+    <script src="https://unpkg.com/vue@next"></script>  
+    <script>
+
+
+      const app = {
+        data(){
+          return{
+            url:'https://vue3-course-api.hexschool.io/admin/signin',
+            user:{}
+          }
+        },
+        methods:{
+          login(){
+                  const userInfo = {
+                      username: this.user.userName,
+                      password: this.user.password,
+                  };
+
+                  axios.post(this.url,userInfo)
+                      .then((res)=>{
+                          if(res.data.success){
+                              const { token, expired } = res.data;
+                              // 寫入 cookie token 
+                              // expires 設置有效時間
+                              document.cookie = `jackyToken=${token};expires=${new Date(expired)}; path=/`;
+                              window.location = 'admin.html';
+                          }
+                      })
+                      .catch((error)=>{
+                          console.log(error);
+                      })
+                
+          }
+        },
+      }
+
+      Vue.createApp(app).mount('#app');
+    </script>  
   </body>
 
 </html>
