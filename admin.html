@@ -290,11 +290,11 @@
         mounted(){
           addModal = new bootstrap.Modal(document.getElementById('productModal'),{keyboard:false});
           delModal = new bootstrap.Modal(document.getElementById('delProductModal'),{keyboard:false});
-          const token = document.cookie.replace(/(?:(?:^|.*;\s*)jackyToken\s*\=\s*([^;]*).*$)|^.*$/, "$1"); 
-          axios.defaults.headers.common['Authorization'] = token;
+          
         },
         created(){
-          
+          const token = document.cookie.replace(/(?:(?:^|.*;\s*)jackyToken\s*\=\s*([^;]*).*$)|^.*$/, "$1"); 
+          axios.defaults.headers.common['Authorization'] = token;
           this.getData();
 
         }
