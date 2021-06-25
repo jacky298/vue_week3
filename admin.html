@@ -79,24 +79,44 @@
             <div class="modal-body">
               <div class="row">
                 <div class="col-sm-4">
-                  <div class="mb-1">
-                    <div class="form-group">
-                      <label for="imageUrl">輸入圖片網址</label>
-                      <input type="text" class="form-control"
-                             placeholder="請輸入圖片連結">
+                    <div class="mb-1">
+                      
+                        <div class="form-group">
+                          <label for="imageUrl">輸入圖片網址</label>
+                          <input v-model="tempProducts.imageUrl" type="text" class="form-control" 
+                              placeholder="請輸入圖片連結">
+                        </div>
+                      <img class="img-fluid" :src="tempProducts.imageUrl" alt="">
+                      
                     </div>
-                    <img class="img-fluid" src="" alt="">
-                  </div>
-                  <div>
-                    <button class="btn btn-outline-primary btn-sm d-block w-100">
-                      新增圖片
-                    </button>
-                  </div>
-                  <div>
-                    <button class="btn btn-outline-danger btn-sm d-block w-100">
-                      刪除圖片
-                    </button>
-                  </div>
+
+                    <div class="mb-1">多圖新增</div>
+                    <div v-if="Array.isArray(tempProducts.imageUrls)">
+                      <div class="mb-1" v-for="(image, key) in tempProducts.imageUrls" :key="key">
+                        <div class="form-group">
+                          <label for="imageUrls">輸入圖片網址</label>
+                          <input type="text" class="form-control" v-model="tempProducts.imageUrls[key]"
+                              placeholder="請輸入圖片連結">
+                        </div>
+                        <img class="img-fluid" :src="image" alt="">
+                      </div>
+                      
+                      <div v-if="!tempProducts.imageUrls.length || tempProducts.imageUrls[tempProducts.imageUrls.length - 1]">
+                        <button class="btn btn-outline-primary btn-sm d-block w-100" @click="tempProducts.imageUrls.push('')">
+                          新增圖片
+                        </button>
+                      </div>
+                      <div v-else>
+                        <button class="btn btn-outline-danger btn-sm d-block w-100" @click="tempProducts.imageUrls.pop()">
+                          刪除圖片
+                        </button>
+                      </div>
+                    </div>
+                    <div v-else>
+                      <button class="btn btn-outline-primary btn-sm d-block w-100" @click="createImages">
+                        新增圖片喔
+                      </button>
+                    </div>
                 </div>
                 <div class="col-sm-8">
                   <div class="form-group">
@@ -207,7 +227,7 @@
           return{
             products:[],
             tempProducts:{
-              
+              imageUrl:[]
             },
             checkNew:""
           }
@@ -285,6 +305,11 @@
                   alert(res.data.message)
                 }
               }).catch(err=>console.log(error))
+          },
+          createImages(){
+            this.tempProducts.imageUrls = [];
+            this.tempProducts.imageUrls.push(' ');
+            
           }
         },
         mounted(){
